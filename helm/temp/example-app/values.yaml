@@ -1,0 +1,6 @@
+deployment:
+  image: "akhilmovva/flask-image"
+  tag: "latest"
+name: flask-app
+pod_name: flask-pod
+replicas: 1

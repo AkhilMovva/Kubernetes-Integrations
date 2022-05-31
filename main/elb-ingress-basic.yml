@@ -1,0 +1,44 @@
+# Annotations Reference:  https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-flaskapp-service
+  labels:
+    app: flask-app
+  # annotations:
+  #   nginx.ingress.kubernetes.io/rewrite-target: /
+  # annotations:
+  #   # Ingress Core Settings
+  #   kubernetes.io/ingress.class: alb
+  #   alb.ingress.kubernetes.io/scheme: internet-facing
+  #   alb.ingress.kubernetes.io/target-type: instance
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+        - path: /app1
+          pathType: Prefix
+          backend:
+            service:
+              name: k8s-web-to-nginx
+              port:
+                number: 80
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: flask-nodeport-service 
+              port:
+                number: 80
+    - host: app2.akhilmovva.live
+      http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: kube-test-container
+              port:
+                number: 80
+            

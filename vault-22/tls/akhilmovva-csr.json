@@ -1,0 +1,15 @@
+{
+	"CN": "*.akhilmovva.live",
+	"hosts": ["akhilmovva.live", "www.akhilmovva.live"],
+	"key": {
+		"algo": "rsa",
+		"size": 2048
+	},
+	"names": [{
+		"C": "CA",
+		"L": "Toronto",
+		"O": "DevOps by Example",
+		"OU": "Dev",
+		"ST": "ON"
+	}]
+}

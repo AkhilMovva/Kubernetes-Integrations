@@ -1,0 +1,39 @@
+{
+    "DomainName": "es-domain",
+    "ElasticsearchVersion": "OpenSearch_1.1",
+    "ElasticsearchClusterConfig" : {
+      "InstanceType": "t3.small.elasticsearch",
+      "InstanceCount": 2,
+      "DedicatedMasterEnabled": false,
+      "ZoneAwarenessEnabled": false,
+      "WarmEnabled": false
+    },
+    "EBSOptions" : {
+      "EBSEnabled": true,
+      "VolumeType": "gp2",
+      "VolumeSize": 20
+    },
+    "AccessPolicies":  "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Action\":\"es:ESHttp*\",\"Resource\":\"arn:aws:es:us-east-1:705413410358:domain/es-domain/*\"}]}",
+    "SnapshotOptions": {},
+    "CognitoOptions" : {
+      "Enabled": false
+    },
+    "EncryptionAtRestOptions" : {
+      "Enabled": true
+    },
+    "NodeToNodeEncryptionOptions": {
+      "Enabled": true
+    },
+    "DomainEndpointOptions": {
+        "EnforceHTTPS": true,
+        "TLSSecurityPolicy": "Policy-Min-TLS-1-0-2019-07"
+    },
+    "AdvancedSecurityOptions": {
+      "Enabled": true,
+      "InternalUserDatabaseEnabled": true,
+      "MasterUserOptions": {
+        "MasterUserName": "akhilmovva",
+        "MasterUserPassword": "Akhilmovva@286"
+      }
+    }
+  }

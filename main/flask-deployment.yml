@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template: 
+    metadata:
+      name: flask-pod
+      labels: 
+        app: flask-app         
+    spec:
+      containers:
+        - name: flask-app-container
+          image: akhilmovva/flask-image:latest
+          env: 
+            - name: ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: flask-app-config
+                  key: environment
+            - name: MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: flask-app-config
+                  key: mysql_host
+          volumeMounts: 
+          - name: database-config-volume
+            mountPath: /etc/any/directory/config
+          - name: database-secret-volume
+            mountPath: /etc/any/directory/secret
+            readOnly: true
+          ports:
+          - containerPort: 5000
+      volumes: 
+        - name: database-config-volume
+          configMap:
+            name: flask-app-config
+        - name: database-secret-volume
+          secret:
+            secretName: mysql-creds
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-nodeport-service 
+  labels: 
+    app: flask-app
+spec:
+  # type: NodePort #LoadBalancer 
+  selector:
+    app: flask-app 
+  ports: 
+    - name: http
+      port: 80 # Service Port
+      targetPort: 5000 # Container Port
+      # nodePort: 31213 # NodePort

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: mysql-volume
+  labels:
+    type: efs
+spec: 
+  #kubectl get storageclass
+  storageClassName: efs
+  capacity:
+    storage: 1Gi
+  accessModes: 
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data"

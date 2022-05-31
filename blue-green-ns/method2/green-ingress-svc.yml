@@ -1,0 +1,11 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: green-ex-svc-nginx
+  namespace: ingress-ns
+spec:
+  type: ExternalName
+  externalName: flask-svc-green.flask-ns-green.svc.cluster.local
+  ports:
+  - port: 80

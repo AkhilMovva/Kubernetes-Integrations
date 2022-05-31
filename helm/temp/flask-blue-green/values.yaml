@@ -1,0 +1,11 @@
+deployment_name: "flask-deployment"
+replicas: "1"
+label_name: "flask-app"
+pod_name: "flask-pod"
+deployment_type: "dev"
+deployment:
+  image: "akhilmovva/flask-image"
+  tag: "latest"
+
+service_name: "flask-service"
+# node_port: "31216"

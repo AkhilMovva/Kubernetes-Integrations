@@ -1,0 +1,35 @@
+logLevel: trace
+config:
+ service: |
+   [SERVICE]
+       Flush 1
+       Daemon Off
+       Log_Level trace
+       Parsers_File custom_parsers.conf
+       HTTP_Server On
+       HTTP_Listen 0.0.0.0
+       HTTP_Port {{ .Values.service.port }}
+ inputs: |
+   [INPUT]
+       Name tail
+       Path /var/log/containers/*istio-proxy*.log
+       Parser cri
+       Tag kube.*
+       Mem_Buf_Limit 5MB
+ outputs: |
+   [OUTPUT]
+       name loki
+       match *
+       host loki.tracing.svc
+       port 3100
+       tenant_id ""
+       labels job=fluentbit
+       label_keys $trace_id
+       auto_kubernetes_labels on
+ customParsers: |
+   [PARSER]
+       Name cri
+       Format regex
+       Regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<message>.*)$
+       Time_Key    time
+       Time_Format %Y-%m-%dT%H:%M:%S.%L%z

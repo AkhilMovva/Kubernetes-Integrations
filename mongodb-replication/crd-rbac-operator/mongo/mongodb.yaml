@@ -1,0 +1,74 @@
+---
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: my-mongodb
+  namespace: mongodb
+spec:
+  members: 1
+  type: ReplicaSet                       # Only supported in community
+  version: "5.0.5"                       # version
+  security:
+    authentication:
+      modes:
+      - SCRAM                            # security auth mechanism
+  users:                                 # Manage mongodb users
+  - name: admin-user
+    db: admin
+    passwordSecretRef:
+      name: admin-user-password
+    roles:                               # Assign roles
+    - name: clusterAdmin
+      db: admin
+    - name: userAdminAnyDatabase
+      db: admin
+    scramCredentialsSecretName: my-scram
+  # security:
+  #   tls:
+  #     enabled: true
+  #     certificateKeySecretRef:
+  #       name: mongodb-key-pair
+  #     caCertificateSecretRef:
+  #       name: mongodb-key-pair
+  #     # optional: true
+  #   authentication:
+  #     modes:
+  #     - SCRAM
+  additionalMongodConfig:                 # Addtional Cofig
+    storage.wiredTiger.engineConfig.journalCompressor: zlib
+  statefulSet:                            # overside any parameters
+    spec:
+      template:
+        metadata:
+          labels:
+            app: mongo
+        spec:
+          containers:
+          - name: mongod
+            resources:
+              limits:
+                cpu: "1"
+                memory: 2Gi
+              requests:
+                cpu: 500m
+                memory: 1Gi      
+          affinity:
+            podAntiAffinity:            # define pods in diff k8s nodes to inc avail
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - my-mongodb
+                topologyKey: "kubernetes.io/hostname"
+      volumeClaimTemplates:            # pvc
+      - metadata:
+          name: data-volume-claim
+        spec:
+          storageClassName: gp2
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 2G

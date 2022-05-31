@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-oauth
+  namespace: stage-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-oauth
+  template: 
+    metadata:
+      name: flask-oauth
+      labels: 
+        app: flask-oauth     
+    spec:
+      containers:
+        - name: flask-oauth
+          image: akhilmovva/flask-oauth:test
+          ports:
+          - containerPort: 5000
+          volumeMounts: 
+          - name: secret-env
+            mountPath: /flask_app/.env
+            subPath: .env
+      volumes: 
+        - name: secret-env
+          secret:
+            secretName: google-creds
+            items:
+            - key: my-api-key
+              path: .env
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-oauth
+  namespace: stage-ns
+  labels: 
+    app: flask-oauth
+spec:
+  # type: ExternalName #LoadBalancer  
+  selector:
+    app: flask-oauth
+  ports: 
+    - name: http
+      port: 80 # Service Port
+      targetPort: 5000 # Container Port
+      # nodePort: 31213 # NodePort

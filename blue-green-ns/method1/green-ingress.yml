@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-flask-svc-green
+  namespace: flask-ns-green
+  labels:
+    app: flask-app
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /    
+spec:
+  # ingressClassName: nginx
+  rules:
+    # - http:
+    #     paths:
+    #     - path: /green
+    #       pathType: Prefix
+    #       backend:
+    #         service:
+    #           name: flask-svc-green
+    #           port:
+    #             number: 80
+    - host: new.akhilmovva.live
+      http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: flask-svc-green
+              port:
+                number: 80

@@ -1,0 +1,42 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: playlists-api
+spec:
+  rules:
+  - host: video.akhilmovva.live
+    http:
+      paths:
+      - pathType: Prefix
+        path: /api/playlists(/|$)(.*)
+        backend:
+          service:
+            name: playlists-api
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: videos-web
+spec:
+  rules:
+  - host: video.akhilmovva.live
+    http:
+      paths:
+      - pathType: Prefix
+        path: /home(/|$)(.*)
+        backend:
+          service:
+            name: videos-web
+            port: 
+              number: 80

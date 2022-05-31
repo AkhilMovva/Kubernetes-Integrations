@@ -1,0 +1,11 @@
+deployment_name: "green-flask-deployment"
+replicas: "1"
+label_name: "green-flask-app"
+pod_name: "green-flask-pod"
+deployment_type: "green"
+deployment:
+  image: "akhilmovva/flask-image"
+  tag: "latest"
+
+service_name: "green-flask-service"
+# node_port: "31217"

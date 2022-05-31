@@ -1,0 +1,8 @@
+# https://www.youtube.com/watch?v=mLPg49b33sA
+# https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-mongodb-exporter
+mongodb:
+  uri: "mongodb://mongo-0.mongo,mongo-1.mongo:27017"
+
+serviceMonitor:
+  additionalLabels:
+    release: prometheus

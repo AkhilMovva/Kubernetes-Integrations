@@ -1,0 +1,30 @@
+# Datadog Agent with Logs, APM, Processes, and System Probe enabled
+
+targetSystem: "linux"
+datadog:
+  apiKey: b8f7cbf9cc61d55a20a57bc117b727ac
+  appKey: 1522c70d09ae5bf6e80fc475172acf41c6cd9bf4
+  # If not using secrets, then use apiKey and appKey instead
+  # apiKeyExistingSecret: <DATADOG_API_KEY_SECRET>
+  # appKeyExistingSecret: <DATADOG_APP_KEY_SECRET>
+  clusterName: eksdemo1
+  tags: []
+  # datadog.kubelet.tlsVerify should be `false` on kind and minikube
+  # to establish communication with the kubelet
+  # kubelet:
+    # tlsVerify: "false"
+  logs:
+    enabled: true
+    containerCollectAll: false
+    containerCollectUsingFiles: true
+  apm:
+    portEnabled: true
+    socketPath: /var/run/datadog/apm.socket
+    hostSocketPath: /var/run/datadog/
+  processAgent:
+    enabled: true
+    processCollection: false
+  systemProbe:
+    enableTCPQueueLength: false
+    enableOOMKill: true
+    collectDNSStats: false

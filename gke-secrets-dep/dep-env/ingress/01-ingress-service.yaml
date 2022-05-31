@@ -1,0 +1,38 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: exn-svc-dev
+  namespace: ingress-ns
+spec:
+  type: ExternalName
+  externalName: flask-oauth.dev-ns.svc.cluster.local
+  # externalName: flask-svc.green-ns.svc.cluster.local
+  ports:
+  - port: 80
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: exn-svc-stage
+  namespace: ingress-ns
+spec:
+  type: ExternalName
+  externalName: flask-oauth.stage-ns.svc.cluster.local
+  # externalName: flask-svc.green-ns.svc.cluster.local
+  ports:
+  - port: 80
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: exn-svc-prod
+  namespace: ingress-ns
+spec:
+  type: ExternalName
+  externalName: flask-oauth.prod-ns.svc.cluster.local
+  # externalName: flask-svc.green-ns.svc.cluster.local
+  ports:
+  - port: 80

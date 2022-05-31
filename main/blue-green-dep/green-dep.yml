@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment-green
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app-green
+  template: 
+    metadata:
+      name: flask-pod-green
+      labels: 
+        app: flask-app-green        
+    spec:
+      containers:
+        - name: flask-app-container-green
+          image: akhilmovva/flask-image:dev
+          env: 
+            - name: ENV
+              value: "green"
+            - name: MYSQL_HOST
+              value: "mysql-release"
+          ports:
+          - containerPort: 5000

@@ -1,0 +1,8 @@
+apiVersion: akhilmovva.io/v1alpha1
+kind: Greeting
+metadata:
+  name: akhilmovva-greeting
+spec:
+  emailToGreet: akhil.movva@gmail.com
+  messageToGreet: Hello
+  replicas: 1

@@ -1,0 +1,56 @@
+# Annotations Reference:  https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/ingress/annotation/
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-flask-svc-blue
+  namespace: flask-ns-blue
+  labels:
+    app: flask-app
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /    
+spec:
+  # ingressClassName: nginx
+  rules:
+    # - http:
+    #     paths:
+    #     - path: /blue
+    #       pathType: Prefix
+    #       backend:
+    #         service:
+    #           name: flask-svc-blue
+    #           port:
+    #             number: 80
+    - host: main.akhilmovva.live
+      http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: flask-svc-blue
+              port:
+                number: 80
+    # - host: blue.akhilmovva.live
+    #   http:
+    #     paths:
+    #     - pathType: Prefix
+    #       path: "/"
+    #       backend:
+    #         service:
+    #           name: blue-flask-service
+    #           port:
+    #             number: 80
+    # - host: green.akhilmovva.live
+    #   http:
+    #     paths:
+    #     - pathType: Prefix
+    #       path: "/"
+    #       backend:
+    #         service:
+    #           name: green-flask-service
+    #           port:
+    #             number: 80
+
+            

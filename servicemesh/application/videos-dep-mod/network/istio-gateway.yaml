@@ -1,0 +1,76 @@
+# apiVersion: networking.istio.io/v1alpha3
+# kind: Gateway
+# metadata:
+#   name: playlists-gateway
+# spec:
+#   selector:
+#     istio: ingressgateway # use istio default controller
+#   servers:
+#   - port:
+#       number: 80
+#       name: http
+#       protocol: HTTP
+#     hosts:
+#     - "*"
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: playlists-api
+# spec:
+#   hosts:
+#   - "*"
+#   gateways:
+#   - videos-gateway
+#   http:
+#   - match:
+#     - uri:
+#         prefix: /api/playlists(/|$)(.*)
+#     route:
+#     - destination:
+#         host: playlists-api.videos-ns.svc.cluster.local
+#         port:
+#           number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: videos-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: videos-web
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - videos-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /home
+        # prefix: /home(/|$)(.*)
+    route:
+    - destination:
+        host: videos-web.videos-ns.svc.cluster.local
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /api/playlists
+    route:
+    - destination:
+        host: playlists-api.videos-ns.svc.cluster.local
+        port:
+          number: 80

@@ -1,0 +1,21 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  # annotations:
+  #   kubectl.kubernetes.io/last-applied-configuration: |
+  #     {"apiVersion":"storage.k8s.io/v1","kind":"StorageClass","metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"},"name":"gp2"},"parameters":{"fsType":"ext4","type":"gp2"},"provisioner":"kubernetes.io/aws-ebs","volumeBindingMode":"WaitForFirstConsumer"}
+  #   storageclass.kubernetes.io/is-default-class: "true"
+  # creationTimestamp: "2022-02-14T01:17:57Z"
+  name: gp21
+  resourceVersion: "254"
+  # uid: 334f157a-d100-4731-9f6a-9e9685d80f03
+parameters:
+  # fsType: ext4
+  type: gp21
+provisioner: kubernetes.io/aws-ebs
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+

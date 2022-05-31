@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-slave-deployment 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-slave
+  strategy:
+    type: Recreate
+  template: 
+    metadata:
+      name: mysql-slave-pod
+      labels: 
+        app: mysql-slave         
+    spec:
+      containers:
+        - name: mysql-slave-con
+          image: mysql:8
+          env: 
+            - name: MYSQL_ROOT_PASSWORD
+              value: "akhil123" 
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts: 
+            - name: database-config-volume
+              mountPath: /etc/cus_cnf
+              # subPath: mysql.cnf
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash", "-c", "cat /etc/cus_cnf/my.cnf >> /etc/mysql/my.cnf"] # /etc/mysql/conf.d/mysql.cnf
+      volumes: 
+        - name: database-config-volume
+          configMap:
+            name: cm-mysql-slave
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service-slave
+spec:
+  selector:
+    app: mysql-salve
+  ports:
+  - port: 3306
+    targetPort: 3306

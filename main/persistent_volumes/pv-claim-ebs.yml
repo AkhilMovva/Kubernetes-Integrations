@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: mysql-pv-claim-ebs
+  labels:
+    type: amazonEBS
+spec: 
+  #kubectl get storageclass
+  storageClassName: gp21
+  accessModes: 
+    - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 100Mi

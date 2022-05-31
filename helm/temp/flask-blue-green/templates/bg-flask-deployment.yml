@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment_name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.label_name }}
+  template: 
+    metadata:
+      name: {{ .Values.pod_name }}
+      labels: 
+        app: {{ .Values.label_name }}        
+    spec:
+      containers:
+        - name: flask-app-container
+          image: {{ .Values.deployment.image }}:{{ .Values.deployment.tag }}
+          env: 
+            - name: ENV
+              value: {{ .Values.deployment_type }} 
+            - name: MYSQL_HOST
+              value: "mysql-service"
+          ports:
+          - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service_name }} 
+  labels: 
+    app: {{ .Values.label_name }} 
+spec:
+  # type: NodePort #LoadBalancer  
+  selector:
+    app: {{ .Values.label_name }} 
+  ports: 
+    - name: http
+      port: 80 # Service Port
+      targetPort: 5000 # Container Port
+      # nodePort: {{ .Values.node_port }} # NodePort

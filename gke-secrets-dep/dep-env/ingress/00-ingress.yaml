@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ingress
+  namespace: ingress-ns
+  labels:
+    app: flask-app
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /    
+spec:
+  rules:
+    - host: dev.akhilmovva.live
+      http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: exn-svc-dev
+              port:
+                number: 80
+    - host: prod.akhilmovva.live
+      http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: exn-svc-stage
+              port:
+                number: 80
+    - host: prod.akhilmovva.live
+      http:
+        paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: exn-svc-prod
+              port:
+                number: 80
+            

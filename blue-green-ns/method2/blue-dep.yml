@@ -1,0 +1,49 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: flask-ns-blue
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment-blue
+  namespace: flask-ns-blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app-blue
+  template: 
+    metadata:
+      name: flask-pod-blue
+      labels: 
+        app: flask-app-blue        
+    spec:
+      containers:
+        - name: flask-app-container-blue
+          image: akhilmovva/flask-image:dev
+          env: 
+            - name: ENV
+              value: "blue"
+            - name: MYSQL_HOST
+              value: "mysql-release"
+          ports:
+          - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-svc-blue
+  namespace: flask-ns-blue
+  labels: 
+    app: flask-app-blue
+spec:
+  # type: ExternalName #LoadBalancer  
+  selector:
+    app: flask-app-blue
+  ports: 
+    - name: http
+      port: 80 # Service Port
+      targetPort: 5000 # Container Port
+      # nodePort: 31213 # NodePort

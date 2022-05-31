@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-secret
+  namespace: mysql-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-secret
+  strategy:
+    type: Recreate
+  template: 
+    metadata:
+      name: mysql-secret
+      labels: 
+        app: mysql-secret  
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/agent-inject-secret-passwords: "secret/mysql-secret/passwords"
+        vault.hashicorp.com/agent-inject-template-passwords: |
+          {{- with secret "secret/mysql-secret/passwords" -}}
+          "MYSQL_ROOT_PASSWORD" : "{{ .Data.MYSQL_ROOT_PASSWORD }}"
+          {{- end }}
+        vault.hashicorp.com/role: "mysql-secret-role"
+    spec:
+      serviceAccountName: mysql-secret
+      containers:
+        - name: mysql-secret
+          image: mysql:8
+          env: 
+            - name: MYSQL_ROOT_PASSWORD
+              value: .Data.MYSQL_ROOT_PASSWORD
+          # command: ["/bin/bash"]
+          # args: ['sh', '-c', 'source /vault/secrets/passwords && <entrypoint script>'] docker-entrypoint.sh
+          # args: ["bin/sh", "-c", "source /vault/secrets/passwords.env && docker-entrypoint.sh"]
+          ports:
+            - containerPort: 3306
+              name: mysql
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mysql-secret
+  labels:
+    app: mysql-secret
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: mysql-secret
+#   namespace: mysql-app
+# spec:
+#   selector:
+#     app: mysql-secret
+#   ports:
+#   - port: 3306
+#     targetPort: 3306

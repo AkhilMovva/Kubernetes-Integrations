@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-master-deployment 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-master
+  # strategy:
+  #   type: Recreate
+  template: 
+    metadata:
+      name: mysql-master-pod
+      labels: 
+        app: mysql-master         
+    spec:
+      containers:
+        - name: mysql-master-con
+          image: mysql:8
+          env: 
+            - name: MYSQL_ROOT_PASSWORD
+              value: "akhil123" 
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts: 
+            - name: database-config-volume
+              mountPath: /etc/cus_cnf
+              # subPath: mysql.cnf
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash", "-c", "cat /etc/cus_cnf/my.cnf >> /etc/mysql/my.cnf"] # /etc/mysql/conf.d/mysql.cnf
+          # command:
+          #   - /bin/sh
+          #   - -c
+          #   - |
+          #     cat  /etc/cus_cnf/my.cnf >> /etc/mysql/conf.d/mysql.cnf
+      volumes: 
+        - name: database-config-volume
+          configMap:
+            name: cm-mysql-master
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service-master
+spec:
+  selector:
+    app: mysql-master
+  ports:
+  - port: 3306
+    targetPort: 3306

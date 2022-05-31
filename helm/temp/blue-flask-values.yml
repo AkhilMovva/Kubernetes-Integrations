@@ -1,0 +1,11 @@
+deployment_name: "blue-flask-deployment"
+replicas: "1"
+label_name: "blue-flask-app"
+pod_name: "blue-flask-pod"
+deployment_type: "blue"
+deployment:
+  image: "akhilmovva/flask-image"
+  tag: "latest"
+
+service_name: "blue-flask-service"
+# node_port: "31216"

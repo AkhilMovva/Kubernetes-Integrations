@@ -1,0 +1,15 @@
+image:
+  registry: docker.io
+  repository: bitnami/mysql
+  tag: 8.0.28-debian-10-r15
+  debug: true
+
+architecture: replication
+
+auth:
+  rootPassword: "akhil123"
+  database: flaskapp
+  replicationUser: replicator
+  replicationPassword: "akhil123"
+
+secondary.replicaCount: 1

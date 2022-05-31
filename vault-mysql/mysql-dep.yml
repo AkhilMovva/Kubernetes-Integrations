@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql8
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql8
+  strategy:
+    type: Recreate
+  template: 
+    metadata:
+      name: mysql8
+      labels: 
+        app: mysql8        
+    spec:
+      containers:
+        - name: mysql8
+          image: mysql:8
+          env: 
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+          ports:
+            - containerPort: 3306
+              name: mysql8
+
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: mysql-service
+# spec:
+#   selector:
+#     app: mysql
+#   ports:
+#   - port: 3306
+#     targetPort: 3306

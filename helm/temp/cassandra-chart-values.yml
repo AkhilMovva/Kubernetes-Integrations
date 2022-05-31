@@ -1,0 +1,35 @@
+dbUser:
+  user: cassandra
+  forcePassword: false
+  password: "akhil123"
+
+## Cluster parameters
+## @param cluster.name Cassandra cluster name
+## @param cluster.seedCount Number of seed nodes
+## @param cluster.numTokens Number of tokens for each node
+## @param cluster.datacenter Datacenter name
+## @param cluster.rack Rack name
+## @param cluster.endpointSnitch Endpoint Snitch
+## @param cluster.internodeEncryption DEPRECATED: use tls.internode and tls.client instead. Encryption values.
+## @param cluster.clientEncryption Client Encryption
+## @param cluster.extraSeeds For an external/second cassandra ring.
+## @param cluster.enableUDF Enable User defined functions
+##
+cluster:
+  name: cassandra
+  seedCount: 1
+  numTokens: 256
+  datacenter: dc1
+  rack: rack1
+  endpointSnitch: SimpleSnitch
+  ## NOTE: internodeEncryption requires tlsEncryptionSecretName
+  ##
+  internodeEncryption: none
+  clientEncryption: false
+  ## eg:
+  ## extraSeeds:
+  ##   - hostname/IP
+  ##   - hostname/IP
+  ##
+  extraSeeds: []
+  enableUDF: false
